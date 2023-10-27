@@ -1,0 +1,6 @@
+root
+admin
+jalkoy
+maintena
+iamshahi
+https://my.meghahost.xyz:2083/
