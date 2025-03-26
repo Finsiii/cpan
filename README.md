@@ -43,7 +43,7 @@ THREAD: 2
 ```
 ├── cpan.py  # Main script
 ├── lib/
-│   ├── test.txt  # Default wordlist
+│   ├── kredensial.txt  # Default wordlist
 ├── Results/
 │   ├── cPanel.txt  # Hasil pencarian cPanel
 │   ├── WHM.txt  # Hasil pencarian WHM
